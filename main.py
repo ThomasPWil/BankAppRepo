@@ -55,42 +55,20 @@ cursor.close()
 
 connection.close()
 
- 
 
+#def logIn():
+    #userLogIn = input(" if you have an account log in here")
+    #userSignIn = input(" if you are new log in here ")
 
-
-
-# psuedo code for getting password function
-# ask user for password if they do not have one
-
-# use SELECT to check user password and match it up with other account info
-
-#afterwards once user has logged in display options
-
-# func to create user account 
 global totalFunds 
 global convertedFundsAdder
 global convStartFunds 
 
 
 
-def checkBalance():
-   global convertedFundsAdder
-   
-   global convStartFunds 
- 
-   #convertedFundsAdder = int(startFunds)
-
-  #convertedFundsAdder = int()
-   
-   totalFunds =  convStartFunds + convertedFundsAdder
-   print(f'you have {totalFunds}$ in your account!')
-   startUp()
-   Input()
 
 
-
-
+# function to create account
 def createAccount():
   connection = mysql.connector.connect(
 
@@ -103,22 +81,28 @@ def createAccount():
   # intialize global vars
   global userNameFirst
   global userNameLast
-  #passWord
+  global passWord
   global userID
 
   global startFunds
-  global totalFunds 
+  global totalFunds
+  totalFunds = 0 
+
+  global convertedFundsAdder
+  convertedFundsAdder = 0
   
   userNameFirst = input("enter your first name ")
   userNameLast = input("enter your last name ")
   passWord = input("enter user password ")
 
+# if user password < 8 chars throw this
   while  not is_passWord_valid(passWord):
      print(passWord + " not valid password")
      passWord = input("enter user password ")
 
   userID = input("enter your ID ")
 
+  # if user ID < 5 chars throw this
   while not is_ID_valid(userID):
        print(userID + " is not valid ID")
        userID = input("enter your ID ")
@@ -143,28 +127,47 @@ def createAccount():
 
   connection.close()
 
-#def logIn():
-    #userLogIn = input(" if you have an account log in here")
-    #userSignIn = input(" if you are new log in here ")
+
+# code to check users balance
+def checkBalance():
+   global totalFunds
+   #global convertedFundsAdder
+   #convertedFundsAdder = 0
+
+   #global convStartFunds 
+ 
+   #convertedFundsAdder = int(startFunds)
+
+  #convertedFundsAdder = int()
+   
+   totalFunds =  convStartFunds + convertedFundsAdder
+   print(f'you have {totalFunds}$ in your account!')
+   startUp()
+   Input()
+
+
 
 # code for adding funds
 def addFunds():
-   global totalFunds 
-   global convertedFundsAdder
-   totalFunds = 0
    
+   global convertedFundsAdder
+   global test
+   global totalFunds
+
    fundsAdder = input("how many dollars would you like to add? ")
    convertedFundsAdder = int(fundsAdder)
-
+   
    totalFunds = convertedFundsAdder + convStartFunds
+   
+   #totalFunds = totalFunds + convStartFunds
    #startFunds = totalFunds
    print(f'you now have {totalFunds}$ in your bank account now')
    startUp()
    Input()
    
-   #code to add 
+   
 
-# code for remove funds options
+# code for remove funds option
 def removeFunds():
    
    
@@ -178,12 +181,20 @@ def removeFunds():
    while (totalFunds < 0):
         print("not enough balance to with draw given amount")
         fundsRemover = input("how much money would you like to withdraw from your account ")
-
+   
    print(f' you now have {totalFunds}$ in your account')
    startUp()
    Input()
 
-   
+# code to modify account info
+def modifyAccount():
+  checkPassword = input("enter you current password ")
+
+  if checkPassword == passWord:
+      print("you passed the check you may modify your account info")
+      modifyPassword = input("enter your new password ")
+      getNewPassword = ("INSERT INTO  bankingschema.bankingtable (FirstName, LastName, PassWord, ID, Funds) VALUES  (" ,userNameFirst ,"," , userNameLast, "," ,  passWord,  ",", userID,  "," , startFunds )
+      #UPDATE bankingschema.bankingtable
     
 
 # this function calls up main UI user interacts with
@@ -193,12 +204,12 @@ def startUp():
   print("1 check account balance")
   print("2 desposit funds ")
   print("3 withdraw funds")
-  #print("4 create new account")
-  #print("5 sign in")
+  print("4 modify account info")
+
   
-# function to get what user picks and repsond accordingly
+# function to get what user picks and respond accordingly
 def getChoice():
- #print("entering getChoice function")
+ 
 
  if userInput == "1":
     checkBalance()
@@ -210,15 +221,15 @@ def getChoice():
  elif userInput == "3":
      removeFunds()
 
- #elif userInput == "4":
-     #createAccount()
+ elif userInput == "4":
+      modifyAccount()
 
- #elif userInput == "5":
-     #print("function goes here goes to sign in")
+
 
  else:
       print("not a valid option")
-      
+      Input()
+      getChoice()
      
 
 
