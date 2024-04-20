@@ -12,10 +12,10 @@ class TestStringMethods(unittest.TestCase):
         self.assertTrue(is_passWord_valid("123befhf"))
 
    
+    #unit test for ID validation    
+    def test_ID(self):
+        self.assertTrue(is_ID_valid("12345"))
         
-    def test_isupper(self):
-        self.assertTrue('FOO'.isupper())
-        self.assertFalse('Foo'.isupper())
     
     
 

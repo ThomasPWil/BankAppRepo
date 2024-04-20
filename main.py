@@ -93,14 +93,14 @@ def createAccount():
   
   userNameFirst = input("enter your first name ")
   userNameLast = input("enter your last name ")
-  passWord = input("enter user password ")
+  passWord = input("enter user password (Has to be > 7 characters) ")
 
 # if user password < 8 chars throw this
   while  not is_passWord_valid(passWord):
      print(passWord + " not valid password")
      passWord = input("enter user password ")
 
-  userID = input("enter your ID ")
+  userID = input("enter your ID (Has to be > 4 charcaters) ")
 
   # if user ID < 5 chars throw this
   while not is_ID_valid(userID):
@@ -113,7 +113,7 @@ def createAccount():
   convStartFunds  = int(startFunds)
 
 
-  # get user accunt data and store it in list
+  # get user accunt data and store it in mySQL databae
   collectAccountData = (print("INSERT INTO  bankingschema.bankingtable (FirstName, LastName, PassWord, ID, Funds) VALUES  (" ,userNameFirst ,"," , userNameLast, "," ,  passWord,  ",", userID,  "," , startFunds )) 
   #collectAccountData = ("INSERT INTO  bankingschema.bankingtable  (FirstName, LastName, PassWord, ID, Funds) VALUES (1, 2, 3, 4, 0) ")
 
@@ -151,7 +151,7 @@ def checkBalance():
 def addFunds():
    
    global convertedFundsAdder
-   global test
+   #global test
    global totalFunds
 
    fundsAdder = input("how many dollars would you like to add? ")
@@ -169,12 +169,13 @@ def addFunds():
 
 # code for remove funds option
 def removeFunds():
-   
-   
-   fundsRemover = input("how much money would you like to withdraw from your account ")
+   global totalFunds
+   totalFunds = 0
+
+   fundsRemover = input(f"how much money would you like to withdraw from your account you currently have {totalFunds}$ in your account ")
    convertedFundsRemover = int(fundsRemover)
 
-   totalFunds = 0
+  
 
    totalFunds = totalFunds - convertedFundsRemover
 
@@ -193,9 +194,23 @@ def modifyAccount():
   if checkPassword == passWord:
       print("you passed the check you may modify your account info")
       modifyPassword = input("enter your new password ")
-      getNewPassword = ("INSERT INTO  bankingschema.bankingtable (FirstName, LastName, PassWord, ID, Funds) VALUES  (" ,userNameFirst ,"," , userNameLast, "," ,  passWord,  ",", userID,  "," , startFunds )
+
+      while  not is_passWord_valid(modifyPassword):
+       print(passWord + " not valid password")
+       passWord = input("enter user password ")
+     
+
+      getNewData = ("INSERT INTO  bankingschema.bankingtable (FirstName, LastName, PassWord, ID, Funds) VALUES  (" ,userNameFirst ,"," , userNameLast, "," ,  passWord,  ",", userID,  "," , startFunds )
+      (print("INSERT INTO  bankingschema.bankingtable (FirstName, LastName, PassWord, ID, Funds) VALUES  (" ,userNameFirst ,"," , userNameLast, "," ,  passWord,  ",", userID,  "," , startFunds ))
       #UPDATE bankingschema.bankingtable
-    
+      
+  else:
+      print("incorrect password entered please try again ")
+      checkPassword = input("enter you current password ")
+
+
+
+
 
 # this function calls up main UI user interacts with
 def startUp():
@@ -217,7 +232,6 @@ def getChoice():
  elif userInput == "2":
       addFunds()
       
-
  elif userInput == "3":
      removeFunds()
 
@@ -228,8 +242,9 @@ def getChoice():
 
  else:
       print("not a valid option")
+      startUp()
       Input()
-      getChoice()
+      
      
 
 
@@ -241,7 +256,7 @@ def Input():
 
 
 
- 
+ # driver code
 createAccount()
 startUp()
 Input()
