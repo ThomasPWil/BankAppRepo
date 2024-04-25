@@ -1,10 +1,15 @@
 import mysql.connector
 
+# import stuff from validate file to check validity of user inputs
 from Validate import is_passWord_valid
 from Validate import is_ID_valid
+from Validate import is_Firstname_Valid
+from Validate import is_Lastname_Valid
 
-print("hello welcome to Wilson Banking")
+# welcome message
+print("Hello and welcome to Wilson Banking!")
 
+# set up mySQL stuff
 connection = mysql.connector.connect(
 
     user = 'root',
@@ -12,35 +17,12 @@ connection = mysql.connector.connect(
     password = 'Gigabyte@12*'
 )
 
-#cursor = connection.cursor()
-#cursorTest = connection.cursor()
 
-#testQuery = ("SELECT * FROM bankingschema.bankingtable")
-
-#addData = ("INSERT INTO  bankingschema.bankingtable (FirstName, LastName, PassWord, ID, Funds) VALUES (Y, P, pip, 124, 5000) ")
-
-#cursor.execute(testQuery)
-#cursorTest.execute(addData)
-
-#for item in cursor:
-
-    #print(item)
-
-
-#for thing in addData:
-    #print(thing)
-
-#cursor.close()
-#cursorTest.close()
-
-#connection.commit()
-
-#connection.close()
 
 cursor = connection.cursor()
 
  
-
+#adding data test
 addData = ("INSERT INTO  bankingschema.bankingtable (FirstName, LastName, PassWord, ID, Funds) VALUES (1, 2, 3, 124, 5000) ")
 
  
@@ -63,7 +45,7 @@ connection.close()
 global totalFunds 
 global convertedFundsAdder
 global convStartFunds 
-
+global passWord
 
 
 
@@ -81,7 +63,7 @@ def createAccount():
   # intialize global vars
   global userNameFirst
   global userNameLast
-  global passWord
+  #global passWord
   global userID
 
   global startFunds
@@ -90,16 +72,31 @@ def createAccount():
 
   global convertedFundsAdder
   convertedFundsAdder = 0
+
+  userNameFirst = input("enter your first name (must contain only letters) ")
   
-  userNameFirst = input("enter your first name ")
-  userNameLast = input("enter your last name ")
+  while not is_Firstname_Valid(userNameFirst):
+   print("not valid first name")
+   userNameFirst = input("enter your first name (must contain only letters) ")
+
+  userNameLast = input("enter your last name (must contain only letters) ")
+
+  while not is_Lastname_Valid(userNameLast):
+   print("not valid last name")
+   userNameLast = input("enter your last name (must contain only letters) ")
+
   passWord = input("enter user password (Has to be > 7 characters) ")
+  
 
 # if user password < 8 chars throw this
   while  not is_passWord_valid(passWord):
      print(passWord + " not valid password")
      passWord = input("enter user password ")
 
+  print(passWord)
+
+  global userPassword
+  userPassword = passWord
   userID = input("enter your ID (Has to be > 4 charcaters) ")
 
   # if user ID < 5 chars throw this
@@ -189,20 +186,22 @@ def removeFunds():
 
 # code to modify account info
 def modifyAccount():
+  
   checkPassword = input("enter you current password ")
 
-  if checkPassword == passWord:
+  if checkPassword == userPassword:
       print("you passed the check you may modify your account info")
       modifyPassword = input("enter your new password ")
 
       while  not is_passWord_valid(modifyPassword):
-       print(passWord + " not valid password")
-       passWord = input("enter user password ")
+       print(userPassword + " not valid password")
+       modifyPassword = input("enter user password ")
      
-
-      getNewData = ("INSERT INTO  bankingschema.bankingtable (FirstName, LastName, PassWord, ID, Funds) VALUES  (" ,userNameFirst ,"," , userNameLast, "," ,  passWord,  ",", userID,  "," , startFunds )
-      (print("INSERT INTO  bankingschema.bankingtable (FirstName, LastName, PassWord, ID, Funds) VALUES  (" ,userNameFirst ,"," , userNameLast, "," ,  passWord,  ",", userID,  "," , startFunds ))
-      #UPDATE bankingschema.bankingtable
+      # put users new password in database
+      getNewData = ("INSERT INTO  bankingschema.bankingtable (FirstName, LastName, PassWord, ID, Funds) VALUES  (" ,userNameFirst ,"," , userNameLast, "," ,  userPassword,  ",", userID,  "," , startFunds )
+      (print("INSERT INTO  bankingschema.bankingtable (FirstName, LastName, PassWord, ID, Funds) VALUES  (" ,userNameFirst ,"," , userNameLast, "," , userPassword,  ",", userID,  "," , startFunds ))
+      startUp()
+      Input()
       
   else:
       print("incorrect password entered please try again ")
