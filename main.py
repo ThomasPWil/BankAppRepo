@@ -5,6 +5,7 @@ from Validate import is_passWord_valid
 from Validate import is_ID_valid
 from Validate import is_Firstname_Valid
 from Validate import is_Lastname_Valid
+from Validate import isIntialDeposValid
 
 # welcome message
 print("Hello and welcome to Wilson Banking!")
@@ -104,13 +105,18 @@ def createAccount():
        print(userID + " is not valid ID")
        userID = input("enter your ID ")
   
+
   startFunds = input("please enter your intial deposit ")
+
+  while not isIntialDeposValid(startFunds):
+     print(startFunds + " is not valid deposit")
+     startFunds = input("please enter your intial deposit $ " )
 
   global convStartFunds 
   convStartFunds  = int(startFunds)
 
 
-  # get user accunt data and store it in mySQL databae
+  # get user accunt data and store it in mySQL database
   collectAccountData = (print("INSERT INTO  bankingschema.bankingtable (FirstName, LastName, PassWord, ID, Funds) VALUES  (" ,userNameFirst ,"," , userNameLast, "," ,  passWord,  ",", userID,  "," , startFunds )) 
   #collectAccountData = ("INSERT INTO  bankingschema.bankingtable  (FirstName, LastName, PassWord, ID, Funds) VALUES (1, 2, 3, 4, 0) ")
 
@@ -167,7 +173,7 @@ def addFunds():
 # code for remove funds option
 def removeFunds():
    global totalFunds
-   totalFunds = 0
+   totalFunds = 10
 
    fundsRemover = input(f"how much money would you like to withdraw from your account you currently have {totalFunds}$ in your account ")
    convertedFundsRemover = int(fundsRemover)
